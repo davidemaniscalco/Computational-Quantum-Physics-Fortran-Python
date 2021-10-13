@@ -1,0 +1,32 @@
+set terminal pngcairo
+set output 'log_fits_cputime_matrixmatrix.png'
+set xlabel 'log(Matrix dimension)'
+set ylabel 'log(Time(s))'
+set title "Log fits for CPU time for matrix-matrix product"
+set key top left
+Rows = "<paste inputdim.dat byrow.dat"
+Cols = "<paste inputdim.dat bycol.dat"
+Matmul = "<paste inputdim.dat matmul.dat"
+set linetype 1 lc rgb 'red' pt 1
+set linetype 2 lc rgb 'red' 
+set linetype 3 lc rgb 'blue' pt 2
+set linetype 4 lc rgb 'blue'
+set linetype 5 lc rgb 'green' pt 3
+set linetype 6 lc rgb 'green' 
+f(x) = a*x+b
+g(x) = c*x+d
+h(x) = m*x+q
+fit f(x) Rows u (log($1)):(log($2)) via a,b
+fit g(x) Cols u (log($1)):(log($2)) via c,d
+fit h(x) Matmul u (log($1)):(log($2)) via m,q
+plot Rows u (log($1)):(log($2)) title 'By row',f(x) title 'By row fit', Cols u (log($1)):(log($2)) title 'By col',g(x) title 'By col fit', Matmul u (log($1)):(log($2)) title 'Matmul',h(x) title 'Matmul fit'
+
+set output 'cputime_matrixmatrix.png'
+set linetype 1 lc rgb 'red' pt 1
+set linetype 2 lc rgb 'blue' pt 2
+set linetype 3 lc rgb 'green' pt 3
+set xlabel 'Matrix dimension'
+set ylabel 'Time(s)
+set title 'CPU time for matrix-matrix product'
+plot Rows title 'By row', Cols title 'By col',Matmul title 'Matmul'
+

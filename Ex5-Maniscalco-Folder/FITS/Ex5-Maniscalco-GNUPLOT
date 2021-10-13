@@ -1,0 +1,33 @@
+set terminal pngcairo
+set key top right
+set xlabel 's'
+set ylabel 'P(s)'
+set style fill solid 0.25
+p(x) = a*x**alfa*exp(-b*x**beta)
+
+a = 3
+alfa =1
+b = 2
+beta = 1
+i=1
+
+do for[file in system('ls [0-9]*')]{
+outFile=sprintf("figure_%d.png", i)
+set output outFile
+set title file
+fit p(x) file via a,alfa,b,beta
+plot file w boxes title 'spacings histogram',p(x) title 'P(s)'
+i = i+1}
+
+a = 3
+alfa = 1
+b = 2
+beta = 1
+
+do for[file in system('ls d*')]{
+outFile=sprintf("figure_%d.png", i)
+set output outFile
+set title file
+fit p(x) file via a,alfa,b,beta
+plot file w boxes title 'spacings histogram',p(x) title 'P(s)'
+i = i+1}
